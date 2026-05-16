@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Barber {
+  id             String          @id @default(cuid())
+  name           String
+  specialization String
+  photoUrl       String?
+  services       BarberService[]
+  bookings       Booking[]
+  availabilities AvailabilitySlot[]
+}
+
+model Service {
+  id          String          @id @default(cuid())
+  name        String
+  description String?
+  barbers     BarberService[]
+  bookings    Booking[]
+}
+
+model BarberService {
+  id        String  @id @default(cuid())
+  barberId  String
+  serviceId String
+  price     Float
+  barber    Barber  @relation(fields: [barberId], references: [id], onDelete: Cascade)
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@unique([barberId, serviceId])
+}
+
+model Booking {
+  id         String   @id @default(cuid())
+  clientName String
+  clientPhone String
+  barberId   String
+  serviceId  String
+  dateTime   DateTime
+  status     String   @default("confirmed") // confirmed, cancelled
+  createdAt  DateTime @default(now())
+
+  barber  Barber  @relation(fields: [barberId], references: [id])
+  service Service @relation(fields: [serviceId], references: [id])
+}
+
+model AvailabilitySlot {
+  id       String   @id @default(cuid())
+  barberId String
+  dateTime DateTime
+  isBlocked Boolean  @default(false)
+
+  barber Barber @relation(fields: [barberId], references: [id], onDelete: Cascade)
+
+  @@unique([barberId, dateTime])
+}
+
+model AdminConfig {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}

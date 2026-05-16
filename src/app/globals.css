@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Jost:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Jost", var(--font-inter), ui-sans-serif, system-ui;
+  --font-serif: "Cormorant Garamond", var(--font-playfair), ui-serif, Georgia;
+  
+  --color-brand-bg: #F8F5F0;
+  --color-brand-text: #1C1A17;
+  --color-brand-accent: #2C2C2C;
+  --color-brand-highlight: #8B4513;
+}
+
+:root {
+  --background: #F8F5F0;
+  --foreground: #1C1A17;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer base {
+  * {
+    @apply border-zinc-200;
+  }
+}
